@@ -21,12 +21,19 @@ MODULAR = [
 ]
 
 
-def replace_link(src: Path, dest: Path) -> None:
+def replace_link(src: Path, dest: Path, *, copy: bool = False) -> None:
     dest.parent.mkdir(parents=True, exist_ok=True)
     if dest.is_symlink() or dest.is_file():
         dest.unlink()
     elif dest.is_dir():
         shutil.rmtree(dest)
+    if copy:
+        if src.is_dir():
+            shutil.copytree(src, dest)
+        else:
+            shutil.copy2(src, dest)
+        print(f"copied {src} -> {dest}")
+        return
     try:
         dest.symlink_to(src, target_is_directory=src.is_dir())
         print(f"symlink {dest} -> {src}")
@@ -67,14 +74,14 @@ def install_hermes(profile: str | None) -> None:
             replace_link(PACK / "skills" / folder, dest / skill_name)
 
 
-def install_claude(project: Path | None) -> None:
+def install_claude(project: Path | None, *, copy: bool) -> None:
     dests = [Path.home() / ".claude" / "skills"]
     if project:
         dests.append(project / ".claude" / "skills")
     for root in dests:
-        replace_link(PACK, root / "agentic-scrum")
+        replace_link(PACK, root / "agentic-scrum", copy=copy)
         for folder, skill_name in MODULAR:
-            replace_link(PACK / "skills" / folder, root / skill_name)
+            replace_link(PACK / "skills" / folder, root / skill_name, copy=copy)
 
 
 def main() -> int:
@@ -83,6 +90,11 @@ def main() -> int:
     parser.add_argument("--claude", action="store_true")
     parser.add_argument("--profile", help="Also link into this Hermes profile")
     parser.add_argument("--project", type=Path, help="Also link into clone/.claude/skills")
+    parser.add_argument(
+        "--copy",
+        action="store_true",
+        help="Copy files instead of symlinks (Claude Code Skills tab prefers copies)",
+    )
     ns = parser.parse_args()
     if not ns.hermes and not ns.claude:
         ns.hermes = True
@@ -91,8 +103,10 @@ def main() -> int:
     if ns.hermes:
         install_hermes(ns.profile)
     if ns.claude:
-        install_claude(ns.project)
-    print("Done. Restart Hermes / Claude Code sessions so they rescan skills.")
+        install_claude(ns.project, copy=True)
+    print("Done. Restart Hermes / Claude Code so they rescan skills.")
+    print("Hermes: Skills hub or `hermes skills list` (enabled local).")
+    print("Claude Code: new chat → Skills; user dir ~/.claude/skills/")
     return 0
 
 
