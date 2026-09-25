@@ -1,0 +1,25 @@
+name: Epic
+description: Product outcome. Choose Type Epic. Lands on the venture Project Roadmap.
+title: ""
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Set **Type** to **Epic**. Add this issue to the venture GitHub Project (Roadmap view).
+        Child work is GitHub **sub-issues**, not a second project.
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Outcome for the product, not a solution.
+    validations:
+      required: true
+  - type: textarea
+    id: dod
+    attributes:
+      label: Definition of Done
+      value: |
+        - [ ] Outcome is visible to the founder
+        - [ ] Child features or stories exist or are explicitly out of scope
+    validations:
+      required: true

@@ -1,0 +1,32 @@
+name: User story
+description: Implementable story. Choose Type Story (or Task if Story type is not in the org).
+title: ""
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Set **Type** to **Story** (or **Task**). Parent = Feature or Epic (sub-issue). Same Project.
+  - type: input
+    id: parent
+    attributes:
+      label: Parent feature or epic number
+      placeholder: "20"
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: As a ... I want ... so that ...
+    validations:
+      required: true
+  - type: textarea
+    id: dod
+    attributes:
+      label: Definition of Done
+      value: |
+        - [ ] Behavior works as described
+        - [ ] Tests updated/added
+        - [ ] Docs only if user path changed
+    validations:
+      required: true
