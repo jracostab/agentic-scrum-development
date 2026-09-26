@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import base64
 import json
 import os
 import subprocess
@@ -328,9 +329,88 @@ def copy_templates(clone: Path) -> None:
     src = PACK / "GITHUB" / "ISSUE_TEMPLATE"
     dest = clone / ".github" / "ISSUE_TEMPLATE"
     dest.mkdir(parents=True, exist_ok=True)
-    for path in src.glob("*.yml"):
+    for path in list(src.glob("*.yml")) + list(src.glob("*.md")):
         shutil.copy2(path, dest / path.name)
         print(f"copied {path.name}")
+
+
+def default_branch(repo: str) -> str:
+    result = subprocess.run(  # noqa: S603
+        ["gh", "api", f"repos/{repo}", "--jq", ".default_branch"],
+        capture_output=True,
+        text=True,
+        check=False,
+        stdin=subprocess.DEVNULL,
+    )
+    name = (result.stdout or "").strip().strip('"')
+    if name in {"", "null"}:
+        return "main"
+    return name
+
+
+def push_issue_templates(repo: str) -> list[str]:
+    """Put issue forms on the default branch so New issue shows the chooser."""
+    branch = default_branch(repo)
+    src = PACK / "GITHUB" / "ISSUE_TEMPLATE"
+    left: list[str] = []
+    files = [p for p in list(src.glob("*.md")) + [src / "config.yml"] if p.is_file()]
+    for path in sorted(files):
+        rel = f".github/ISSUE_TEMPLATE/{path.name}"
+        body = {
+            "message": f"Add or update issue template {path.name}",
+            "content": base64.b64encode(path.read_bytes()).decode("ascii"),
+            "branch": branch,
+        }
+        got = subprocess.run(  # noqa: S603
+            ["gh", "api", f"repos/{repo}/contents/{rel}?ref={branch}"],
+            capture_output=True,
+            text=True,
+            check=False,
+            stdin=subprocess.DEVNULL,
+        )
+        if got.returncode == 0:
+            try:
+                body["sha"] = json.loads(got.stdout)["sha"]
+            except (json.JSONDecodeError, KeyError):
+                pass
+        put = subprocess.run(  # noqa: S603
+            ["gh", "api", "--method", "PUT", f"repos/{repo}/contents/{rel}", "--input", "-"],
+            input=json.dumps(body),
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        if put.returncode != 0:
+            left.append(f"Could not push {rel}: {(put.stderr or put.stdout).strip()}")
+        else:
+            print(f"pushed {rel} → {branch}")
+    for stale in ("epic.yml", "feature.yml", "story.yml", "bug.yml"):
+        rel = f".github/ISSUE_TEMPLATE/{stale}"
+        got = subprocess.run(  # noqa: S603
+            ["gh", "api", f"repos/{repo}/contents/{rel}?ref={branch}"],
+            capture_output=True,
+            text=True,
+            check=False,
+            stdin=subprocess.DEVNULL,
+        )
+        if got.returncode != 0:
+            continue
+        try:
+            sha = json.loads(got.stdout)["sha"]
+        except (json.JSONDecodeError, KeyError):
+            continue
+        gone = subprocess.run(  # noqa: S603
+            ["gh", "api", "--method", "DELETE", f"repos/{repo}/contents/{rel}", "--input", "-"],
+            input=json.dumps(
+                {"message": f"Remove invalid issue form {stale}", "sha": sha, "branch": branch}
+            ),
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        if gone.returncode == 0:
+            print(f"removed {rel}")
+    return left
 
 
 def main() -> int:
@@ -363,9 +443,9 @@ def main() -> int:
         print(f"\nexport GH_PROJECT={ns.title!r}")
         print(f"export REPO={ns.repo}")
         print(f"export GH_SCRUM_MODE={mode}")
+    left.extend(push_issue_templates(ns.repo))
     if ns.clone:
         copy_templates(ns.clone)
-        left.append(f"Commit {ns.clone}/.github/ISSUE_TEMPLATE yourself (script does not push).")
     leftover("Still manual (if any)", left)
     return 0
 

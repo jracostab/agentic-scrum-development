@@ -1,7 +1,7 @@
 # Current state
 
 Where the work lives
-Everything is in `/home/jracosta/work/dev/agentic-scrum-development`. The Co-Founder clone (`ai-co-founder-workspace`) was not changed. Your GitHub org/repo was not changed either — the new setup script exists but has **not** been run against your live GitHub.
+Everything is in `$HOME/workspace/agentic-scrum-development`. The Co-Founder clone (`ai-co-founder-workspace`) was not changed. Your GitHub org/repo was not changed either — the new setup script exists but has **not** been run against your live GitHub.
 
 What we decided
 Scrum on GitHub should look like GitHub, not like extra labels.
@@ -47,7 +47,7 @@ A. You must run the setup once (we did not run it for you)
 export REPO=your-org-or-user/your-repo
 export GH_PROJECT="Venture board"
 gh auth refresh -s project    # if gh says it cannot touch Projects
-python3 "$HOME/work/dev/agentic-scrum-development/scripts/setup_github.py" \
+python3 "$HOME/workspace/agentic-scrum-development/scripts/setup_github.py" \
   --repo "$REPO" --title "$GH_PROJECT" \
   --clone /path/to/your/repo
 ```

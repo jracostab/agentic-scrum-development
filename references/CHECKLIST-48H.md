@@ -6,12 +6,12 @@ Repo default: set `REPO` in your shell.
 
 ```bash
 export REPO=jracostab/ai-co-founder-workspace
-export PACK="$HOME/work/dev/agentic-scrum-development"
+export PACK="$HOME/workspace/agentic-scrum-development"
 chmod +x "$PACK/scripts/"*.sh
 "$PACK/scripts/enable_automation.sh"
 # optional: write .github into a clone and skills onto a Hermes profile
 "$PACK/scripts/enable_automation.sh" \
-  --clone "$HOME/work/dev/ai-co-founder-workspace" \
+  --clone "$HOME/workspace/tinto-co-founder" \
   --profile tinto
 ```
 

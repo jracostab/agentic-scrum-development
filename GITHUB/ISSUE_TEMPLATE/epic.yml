@@ -1,6 +1,5 @@
 name: Epic
 description: Product outcome. Choose Type Epic. Lands on the venture Project Roadmap.
-title: ""
 body:
   - type: markdown
     attributes:
@@ -21,5 +20,14 @@ body:
       value: |
         - [ ] Outcome is visible to the founder
         - [ ] Child features or stories exist or are explicitly out of scope
+    validations:
+      required: true
+  - type: textarea
+    id: ac
+    attributes:
+      label: Acceptance Criteria
+      description: Observable checks that this epic is complete from the founder's point of view.
+      value: |
+        - [ ]
     validations:
       required: true
