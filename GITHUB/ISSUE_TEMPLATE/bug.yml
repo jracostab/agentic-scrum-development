@@ -1,6 +1,5 @@
 name: Bug
 description: Defect. Choose Type Bug. Shows on the same Project in the Defects view.
-title: ""
 body:
   - type: markdown
     attributes:
@@ -37,5 +36,14 @@ body:
       value: |
         - [ ] Repro no longer fails
         - [ ] Regression test added
+    validations:
+      required: true
+  - type: textarea
+    id: ac
+    attributes:
+      label: Acceptance Criteria
+      description: Observable checks that this defect is resolved from the user's point of view.
+      value: |
+        - [ ]
     validations:
       required: true

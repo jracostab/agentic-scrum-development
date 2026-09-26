@@ -220,9 +220,29 @@ python3 "$AGENTIC_SCRUM_HOME/scripts/setup_github.py" \
   --clone /path/to/skunkworks-test-hardness
 ```
 
-Re-running reuses the Project with that title. If issue forms were copied, commit `.github/ISSUE_TEMPLATE` yourself.
+Re-running reuses the Project with that title. Issue templates are pushed to the repo default branch automatically (`config.yml` turns on the template chooser).
 
-### 6.3 Create issues
+### 6.3 Create issues from a template (UI)
+
+GitHub shows the template list only on the **repository Issues** page. Project **Add item** does not open a template; it creates a blank draft.
+
+After templates are pushed, GitHub often serves a cached blank page. **Hard-refresh** the chooser before you conclude it failed:
+
+- Windows / Linux: `Ctrl+Shift+R`
+- macOS: `Cmd+Shift+R`
+
+Then:
+
+1. Open `https://github.com/<owner>/<repo>/issues/new/choose`
+2. You should see four cards: Epic, Feature, User story, Bug (illustration below).
+3. Click one card. That page is the form.
+4. Fill Description, Definition of Done, then Acceptance Criteria.
+
+![New issue template chooser with four cards: Epic, Feature, User story, Bug](GITHUB/screenshots/issue-template-chooser.png)
+
+If the list is still missing after a hard refresh, confirm you are on `/issues/new/choose` (not `/issues/new`) and that you are logged in with permission to file issues.
+
+### 6.4 Create issues from the CLI
 
 The same commands apply to organization and personal repositories:
 

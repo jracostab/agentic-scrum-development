@@ -46,7 +46,7 @@ def install_hermes_profile(profile: str) -> None:
     include = home / "profiles" / profile / "SCRUM.md"
     include.write_text(
         "Load skill agentic-scrum (product-owner). "
-        "Pack: $HOME/work/dev/agentic-scrum-development\n",
+        "Pack: $HOME/workspace/agentic-scrum-development\n",
         encoding="utf-8",
     )
     print(f"wrote {include}")

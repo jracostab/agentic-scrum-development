@@ -1,6 +1,5 @@
 name: User story
 description: Implementable story. Choose Type Story (or Task if Story type is not in the org).
-title: ""
 body:
   - type: markdown
     attributes:
@@ -28,5 +27,14 @@ body:
         - [ ] Behavior works as described
         - [ ] Tests updated/added
         - [ ] Docs only if user path changed
+    validations:
+      required: true
+  - type: textarea
+    id: ac
+    attributes:
+      label: Acceptance Criteria
+      description: Observable checks that this story is complete from the user's point of view.
+      value: |
+        - [ ]
     validations:
       required: true

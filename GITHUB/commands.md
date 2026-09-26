@@ -3,7 +3,7 @@
 ```bash
 export REPO=owner/name
 export GH_PROJECT="Venture board"
-export AGENTIC_SCRUM_HOME="$HOME/work/dev/agentic-scrum-development"
+export AGENTIC_SCRUM_HOME="$HOME/workspace/agentic-scrum-development"
 gh auth refresh -s project   # once, if project scope is missing
 ```
 

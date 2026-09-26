@@ -26,7 +26,7 @@ Human Founder is the only approver (G1–G4). GitHub Issues are the system of re
 `$AGENTIC_SCRUM_HOME` or the directory that contains `scripts/workitems.py` (this repo).
 
 ```bash
-export AGENTIC_SCRUM_HOME="${AGENTIC_SCRUM_HOME:-$HOME/work/dev/agentic-scrum-development}"
+export AGENTIC_SCRUM_HOME="${AGENTIC_SCRUM_HOME:-$HOME/workspace/agentic-scrum-development}"
 export REPO="${REPO:?set owner/name}"
 ```
 

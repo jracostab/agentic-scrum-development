@@ -18,7 +18,7 @@ usage: $0 [options]
 
 Examples:
   export REPO=jracostab/ai-co-founder-workspace
-  $0 --clone \$HOME/work/dev/ai-co-founder-workspace
+  $0 --clone \$HOME/workspace/tinto-co-founder
 EOF
 }
 

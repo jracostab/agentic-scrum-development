@@ -19,7 +19,7 @@ Use GitHub issue **types** and **sub-issues**. One Project (`GH_PROJECT`). See `
 ```bash
 export REPO="${REPO:?owner/name}"
 export GH_PROJECT="${GH_PROJECT:-Venture board}"
-export AGENTIC_SCRUM_HOME="${AGENTIC_SCRUM_HOME:-$HOME/work/dev/agentic-scrum-development}"
+export AGENTIC_SCRUM_HOME="${AGENTIC_SCRUM_HOME:-$HOME/workspace/agentic-scrum-development}"
 WI="python3 $AGENTIC_SCRUM_HOME/scripts/workitems.py"
 
 $WI create Epic "Title" ./body.md
@@ -30,7 +30,7 @@ $WI comment 35 ./comment.md
 ```
 
 Rules:
-- Body always has `## Description` and `## Definition of Done`.
+- Body always has `## Description`, `## Definition of Done`, and `## Acceptance Criteria`.
 - Bugs also have Steps, Symptoms, Expected.
 - Parent = `--parent N` (GitHub sub-issue).
 - Do not create issues until the matching Founder gate passed.

@@ -4,7 +4,7 @@ Load POLICIES/sdlc-policy.md and POLICIES/approval-policy.md.
 
 ## Session
 1. Confirm venture (`FOUNDING.md` / `venture-cli`).
-2. Skill: work-items (`$HOME/work/dev/agentic-scrum-development/SKILLS/work-items`).
+2. Skill: work-items (`$HOME/workspace/agentic-scrum-development/SKILLS/work-items`).
 3. List open `type:epic` and current sprint labels.
 
 ## You do

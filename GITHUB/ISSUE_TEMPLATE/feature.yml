@@ -1,6 +1,5 @@
 name: Feature
 description: Slice of an epic. Choose Type Feature. Sub-issue of the parent Epic.
-title: ""
 body:
   - type: markdown
     attributes:
@@ -26,5 +25,14 @@ body:
       value: |
         - [ ] Stories covering this slice exist
         - [ ] User-visible behavior is named
+    validations:
+      required: true
+  - type: textarea
+    id: ac
+    attributes:
+      label: Acceptance Criteria
+      description: Observable checks that this feature is complete from the user's point of view.
+      value: |
+        - [ ]
     validations:
       required: true

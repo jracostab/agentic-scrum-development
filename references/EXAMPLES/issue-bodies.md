@@ -66,6 +66,6 @@ Waiting for G3.
 
 ```
 Take GitHub issue #41. REPO=jracostab/ai-co-founder-workspace.
-Follow $HOME/work/dev/agentic-scrum-development/AGENTS/developer/AGENTS.md
+Follow $HOME/workspace/agentic-scrum-development/AGENTS/developer/AGENTS.md
 and SKILLS/story-implement. Stop after the plan comment.
 ```
