@@ -21,8 +21,22 @@ MODULAR = [
 ]
 
 
+def _overlaps(a: Path, b: Path) -> bool:
+    a, b = a.resolve(), b.resolve()
+    return a == b or a in b.parents or b in a.parents
+
+
 def replace_link(src: Path, dest: Path, *, copy: bool = False) -> None:
     dest.parent.mkdir(parents=True, exist_ok=True)
+    if dest.exists() and dest.resolve() == src.resolve():
+        print(f"in place {dest} -> {src}")
+        return
+    if dest.is_dir() and not dest.is_symlink() and _overlaps(dest, src):
+        # Never delete the pack itself (e.g. a real pack folder at ~/.hermes/skills/agentic-scrum).
+        raise SystemExit(
+            f"Refusing to replace {dest}: it contains or is inside the pack ({src}). "
+            "Move the pack outside the skills folder and re-run."
+        )
     if dest.is_symlink() or dest.is_file():
         dest.unlink()
     elif dest.is_dir():
@@ -52,9 +66,15 @@ def write_home_pointer() -> None:
     print(f"AGENTIC_SCRUM_HOME -> {PACK} ({cfg / 'home'})")
 
 
+def hermes_root() -> Path:
+    """The Hermes install root, even when HERMES_HOME points at a profile dir
+    (<root>/profiles/<name>), as it does inside a `hermes -p <name>` session."""
+    home = Path(os.environ.get("HERMES_HOME", Path.home() / ".hermes")).expanduser()
+    return home.parent.parent if home.parent.name == "profiles" else home
+
+
 def hermes_skills_root() -> Path:
-    home = Path(os.environ.get("HERMES_HOME", Path.home() / ".hermes"))
-    return home / "skills"
+    return hermes_root() / "skills"
 
 
 def install_hermes(profile: str | None) -> None:
@@ -63,12 +83,7 @@ def install_hermes(profile: str | None) -> None:
     for folder, skill_name in MODULAR:
         replace_link(PACK / "skills" / folder, root / skill_name)
     if profile:
-        dest = (
-            Path(os.environ.get("HERMES_HOME", Path.home() / ".hermes"))
-            / "profiles"
-            / profile
-            / "skills"
-        )
+        dest = hermes_root() / "profiles" / profile / "skills"
         replace_link(PACK, dest / "agentic-scrum")
         for folder, skill_name in MODULAR:
             replace_link(PACK / "skills" / folder, dest / skill_name)

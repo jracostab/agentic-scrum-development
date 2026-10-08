@@ -47,17 +47,33 @@ LEGACY_ROLE = {
 }
 
 
+def _env_hermes_home() -> Path:
+    return Path(os.environ.get("HERMES_HOME", Path.home() / ".hermes")).expanduser()
+
+
+def _is_profile_dir(path: Path) -> bool:
+    """Inside a Hermes session HERMES_HOME is the profile dir: <root>/profiles/<name>."""
+    return path.parent.name == "profiles"
+
+
 def hermes_home() -> Path:
-    return Path(os.environ.get("HERMES_HOME", Path.home() / ".hermes"))
+    """The Hermes install root, even when HERMES_HOME points at a profile dir."""
+    home = _env_hermes_home()
+    return home.parent.parent if _is_profile_dir(home) else home
 
 
 def profile_name() -> str:
-    return (
+    explicit = (
         os.environ.get("COFOUNDER_PROFILE")
         or os.environ.get("HERMES_PROFILE")
         or os.environ.get("AGENTIC_SCRUM_PROFILE")
         or ""
     ).strip()
+    if explicit:
+        return explicit
+    # Plain `hermes -p <name>` sessions set only HERMES_HOME (to the profile dir).
+    home = _env_hermes_home()
+    return home.name if _is_profile_dir(home) else ""
 
 
 def claude_agent() -> str:
