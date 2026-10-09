@@ -198,7 +198,9 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("issue_type", help="Epic, Feature, Story, Bug, or Task")
     p.add_argument("title")
     p.add_argument("body")
-    p.add_argument("--parent", type=int, default=0)
+    # Number (same repo) or issue URL (any repo: e.g. a Story in a product repo under a
+    # Feature in the company repo). Passed through to `gh issue create --parent`.
+    p.add_argument("--parent", default="")
     p.add_argument("--project", default="")
     p.set_defaults(func=cmd_create)
 
