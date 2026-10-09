@@ -32,7 +32,8 @@ $WI comment 35 ./comment.md
 Rules:
 - Body always has `## Description`, `## Definition of Done`, and `## Acceptance Criteria`.
 - Bugs also have Steps, Symptoms, Expected.
-- Parent = `--parent N` (GitHub sub-issue).
+- Parent = `--parent N` (GitHub sub-issue), or `--parent <issue URL>` for a parent in another repo
+  (e.g. a Story in a product repo under a Feature in the company repo).
 - Do not create issues until the matching Founder gate passed.
 - Do not add `type:` or `sprint:` labels.
 - If `gh` is missing, stop.
